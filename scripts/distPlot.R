@@ -22,7 +22,12 @@ boxplot.tss.distances <- function(df){
     facet_wrap(~name) + theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()
-        ) + scale_fill_manual(values=colors)
+        ) + scale_fill_manual(values=colors) +
+        theme(text = element_text(size = 15, face='bold')) +
+        labs(
+            title='Distance TSS to peak start',
+            x='Condition', y='Distance to T3 promoter'
+        ) 
 }
 
 peaks.per.condition <- function(df){
@@ -33,7 +38,11 @@ peaks.per.condition <- function(df){
     theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()
-        ) + scale_fill_manual(values=colors) + facet_wrap(~name)
+        ) + scale_fill_manual(values=colors) + facet_wrap(~name) +
+        theme(text = element_text(face='bold', size = 15)) +
+        labs(
+            title='SMRF-seq peaks per condition', x='Condition', y='Peak count'
+        ) 
 
 }
 
@@ -77,7 +86,7 @@ main <- function(){
     main.plot <- ggarrange(
         box, bar, nrow=1, ncol=2
     )
-    ggsave(snakemake@output$plot, main.plot, dpi=600, width=16, height=10)
+    ggsave(snakemake@output$plot, main.plot, dpi=600, width=18, height=12)
 
 
 
