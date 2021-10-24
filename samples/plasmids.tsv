@@ -1,0 +1,3 @@
+sample_name	filepath	TSS_seq	Promoter_species	peak_dir	promoter_direction
+pFC8	plasmids/pFC8.fa	ctttagtgagggttaat	T3	data/3_PEAK_BED_COORDINATE/pFC8	-
+pFC53	plasmids/pFC53.fa	ctttagtgagggttaat	T3	data/3_PEAK_BED_COORDINATE/pFC53	-
