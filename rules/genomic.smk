@@ -1,8 +1,17 @@
 
 
-rule remove_hg19_header:
+rule simplify_hg19_genes:
     input:
         'data/ucsc/ucsc.hg19.genes.tsv'
+    output:
+        'data/ucsc/ucsc.hg19.genes.simp.tsv'
+    threads: 8
+    script:'../scripts/cleanUCSCgenes.py'
+
+
+rule remove_hg19_header:
+    input:
+        'data/ucsc/ucsc.hg19.genes.simp.tsv'
     output:
         temp('data/ucsc/ucsc.hg19.genes.noheader.tsv')
     shell:'''
@@ -21,7 +30,7 @@ rule hg19_genes_to_bed:
     output:
         'output/ucsc/ucsc.hg19.genes.clean.bed'
     shell:'''
-    awk \'{{print $2 "\t" $4 "\t" $5 "\t" $17 "\t" $1 "\t" $3}}\' {input} > {output}
+    awk -F '\t' \'{{print $2 "\t" $4 "\t" $5 "\t" $17 "\t" $1 "\t" $3}}\' {input} > {output}
     '''
 
 
@@ -38,4 +47,39 @@ rule intersect_hg19_gene:
     shell:'''
     bedtools intersect -wa -wb -a {input.genomic_smrf} -b {input.hg19_genes} > {output} 
     '''
+
+
+rule calculate_d_init:
+    conda:
+        '../envs/Py.yml'
+    input:
+        bed_intersect='output/genomic/hg19-intersect/{genomic_smrf}-hg19-intersect.bed'
+    output:
+        'output/genomic/hg19-d_init/{genomic_smrf}-hg19-intersect-d_init.tsv'
+    script:'../scripts/peak2TSSGenomic.py'
+
+
+rule cat_d_init_file:
+    input:
+        expand(
+            'output/genomic/hg19-d_init/{genomic_smrf}-hg19-intersect-d_init.tsv',
+            genomic_smrf=list(df_genomic['stem'])
+        )
+    output:
+        'output/genomic/genomic-smrf-peaks-d_init-concat.tsv'
+    shell:'''
+    cat {input} > {output}
+    '''
+
+rule plot_genomic_init_distances:
+    conda:
+        '../envs/R.yml'
+    input:
+        distances='output/genomic/genomic-smrf-peaks-d_init-concat.tsv'
+    output:
+        plot='output/genomic/plots/genomic-tss-dists.pdf'
+    script:'../scripts/distPlot.R'
+        
+
+
 

@@ -3,8 +3,10 @@ import pandas as pd
 
 
 def read_bed_like(peak_bed_path):
-
-    return pd.read_csv(peak_bed_path, sep="\t", header=None).values.tolist()
+    try:
+        return pd.read_csv(peak_bed_path, sep="\t", header=None).values.tolist()
+    except Exception:
+        return None
 
 
 def calculate_distance_from_TSS_start(peak, TSS_orientation, TSS_start, TSS_end):
@@ -35,19 +37,12 @@ def main():
     peak_list = read_bed_like(peaks)
     promoter = read_bed_like(promoter_coords)[0]  # should only be one item
 
-    TSS_dist_peaks = add_TSS_distance(
-        peak_list, promoter[-1], promoter[1], promoter[2]
-        )
+    TSS_dist_peaks = add_TSS_distance(peak_list, promoter[-1], promoter[1], promoter[2])
     # append condition to each row
-    condition = '_'.join(snakemake.params['condition'].split('_')[1:])
-    print(condition)
-    print(len(TSS_dist_peaks))
+    condition = "_".join(snakemake.params["condition"].split("_")[1:])
     assert len(TSS_dist_peaks.columns) == 7
-    
-    TSS_dist_peaks[len(TSS_dist_peaks.columns)] = condition
 
-    print(TSS_dist_peaks)
-    
+    TSS_dist_peaks[len(TSS_dist_peaks.columns)] = condition
 
     TSS_dist_peaks.to_csv(output_path, sep="\t", index=False, header=None)
 
