@@ -6,4 +6,3 @@ output/
 .vscode
 *.out
 logs/
-data/
