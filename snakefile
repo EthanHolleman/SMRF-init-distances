@@ -41,8 +41,18 @@ include: 'rules/plasmids.smk'
 
 rule all:
     input:
-        'output/plasmids/plots/plasmids-tss-dists.pdf',
-        'output/genomic/plots/genomic-tss-dists.pdf'
+        'output.tar.gz'
+
+rule gzip_output:
+    input:
+        genomic='output/plasmids/plots/plasmids-tss-dists.pdf',
+        plasmids='output/genomic/plots/genomic-tss-dists.pdf'
+    output:
+        'output.tar.gz'
+    shell:'''
+    tar -zcvf output.tar.gz output/
+    '''
+
 
 
 
