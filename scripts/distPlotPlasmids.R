@@ -33,6 +33,12 @@ boxplot.tss.distances <- function(df){
 peaks.per.condition <- function(df){
 
     colors <- colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(df$condition)))
+    tt <- table(df$condition)
+    # only include conditions with greater than 20 reads
+    print(tt)
+    df <- df[ave(df$score, df$name, FUN = length) > 50, ]
+    print(head(df))
+    
     ggplot(df, aes(x=condition, fill=condition)) +
     geom_bar(color='black') + theme_pubr() +
     theme(axis.title.x=element_blank(),
@@ -56,7 +62,8 @@ main <- function(){
     main.plot <- ggarrange(
         box, bar, nrow=1, ncol=2
     )
-    ggsave(snakemake@output$plot, main.plot, dpi=600, width=18, height=12)
+    ggsave(snakemake@output$plot_pdf, main.plot, dpi=600, width=18, height=12)
+    ggsave(snakemake@output$plot_png, main.plot, dpi=600, width=18, height=12)
 
 
 

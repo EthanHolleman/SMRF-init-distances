@@ -41,7 +41,7 @@ include: 'rules/plasmids.smk'
 
 rule all:
     input:
-        'output/plasmids/plasmids-tss-dists.pdf',
+        'output/plasmids/plots/plasmids-tss-dists.pdf',
         'output/genomic/plots/genomic-tss-dists.pdf'
 
 

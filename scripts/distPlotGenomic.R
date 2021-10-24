@@ -68,12 +68,6 @@ boxplot.tss.percent.distances <- function(df){
 
 boxplot.tss.distances <- function(df){
     colors <- colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(df$condition)))
-
-    tt <- df$condition
-    # only include conditions with greater than 20 reads
-    df <- df[df$name %in% names(tt[tt > 20]), ]
-
-
     ggplot(df, aes(x=condition, y=TSS_dist, fill=condition)) + 
         geom_boxplot(color='black') + theme_pubr() +
         theme(legend.position='None') + scale_fill_manual(values=colors) +
@@ -135,8 +129,7 @@ main <- function(){
 
     file.path <- snakemake@input$distances
     df <- read.bed.like(file.path)
-    #box <- boxplot.tss.distances(df)
-    box <- boxplot.tss.distances (df)
+    box <- boxplot.tss.distances(df)
     box.percent <- boxplot.tss.percent.distances(df)
     scatter <- gene.length.mean.dist(df)
     bar <- peaks.per.condition(df)
@@ -145,7 +138,8 @@ main <- function(){
        bar, scatter,
        box, box.percent, nrow=2, ncol=2
     )
-    ggsave(snakemake@output$plot, main.plot, dpi=600, width=18, height=12)
+    ggsave(snakemake@output$plot_pdf, main.plot, dpi=600, width=18, height=12)
+    ggsave(snakemake@output$plot_png, main.plot, dpi=600, width=18, height=12)
 
 
 

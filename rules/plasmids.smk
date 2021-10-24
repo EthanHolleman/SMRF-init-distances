@@ -44,6 +44,7 @@ rule plot_plasmid_distances:
     input:
         distances='output/plasmids/cat-TSS-distances.tsv'
     output:
-        plot='output/plasmids/plasmids-tss-dists.pdf'
+        plot_pdf='output/plasmids/plots/plasmids-tss-dists.pdf',
+        plot_png='output/plasmids/plots/plasmids-tss-dists.png',
     script:'../scripts/distPlotPlasmids.R'
 

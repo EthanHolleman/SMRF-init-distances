@@ -77,8 +77,9 @@ rule plot_genomic_init_distances:
     input:
         distances='output/genomic/genomic-smrf-peaks-d_init-concat.tsv'
     output:
-        plot='output/genomic/plots/genomic-tss-dists.pdf'
-    script:'../scripts/distPlot.R'
+        plot_pdf='output/genomic/plots/genomic-tss-dists.pdf',
+        plot_png='output/genomic/plots/genomic-tss-dists.png'
+    script:'../scripts/distPlotGenomic.R'
         
 
 
