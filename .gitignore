@@ -1,8 +1,5 @@
 .snakemake/
 output/
-*.bed
-*.fasta
-*.fa
 .vscode
 *.out
 logs/
